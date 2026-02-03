@@ -76,9 +76,6 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "rkdfurgksqlalfqjsgh")
 
 db = SQLAlchemy(app)
 
-with app.app_context():
-    db.create_all()
-
 import os
 
 print("✅ 현재 작업 폴더:", os.getcwd())
@@ -108,6 +105,9 @@ def load_user(user_id):
     if user_id == "admin":
         return Admin()
     return None
+
+with app.app_context():
+    db.create_all()
 
 # 페이지 라우트
 @app.route("/")
