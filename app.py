@@ -50,19 +50,31 @@ def kst(dt):
         return ""
     return (dt + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M")
 
-# DB 설정
+# DB 설정 (Railway: PostgreSQL, 로컬: SQLite)
 
 db_path = os.path.join(app.instance_path, "app.db")
 os.makedirs(app.instance_path, exist_ok=True)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+database_url = os.getenv("DATABASE_URL")  # Railway에서 주는 값
+
+if database_url:
+    # Railway에서 postgres:// 로 올 때가 있어서 SQLAlchemy용으로 보정
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+else:
+    # 로컬에서는 기존처럼 sqlite 사용
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + db_path
+
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret")
 
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "rkdfurgksqlalfqjsgh")
 
 db = SQLAlchemy(app)
+
+with app.app_context():
+    db.create_all()
 
 import os
 
@@ -301,8 +313,3 @@ def admin_contact_answer(contact_id):
 #     with app.app_context():
 #         db.create_all()  # DB 테이블 생성
 #     app.run(debug=True)
-    
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-    app.run()
