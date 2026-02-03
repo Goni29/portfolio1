@@ -55,14 +55,17 @@ def kst(dt):
 db_path = os.path.join(app.instance_path, "app.db")
 os.makedirs(app.instance_path, exist_ok=True)
 
-database_url = os.getenv("DATABASE_URL")  # Railway에서 주는 값
+database_url = os.getenv("DATABASE_URL")
 
 if database_url:
-    # Railway에서 postgres:// 로 올 때가 있어서 SQLAlchemy용으로 보정
     database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+    # ✅ SQLAlchemy가 pg8000 드라이버를 쓰게 강제
+    if database_url.startswith("postgresql://"):
+        database_url = database_url.replace("postgresql://", "postgresql+pg8000://", 1)
+
     app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 else:
-    # 로컬에서는 기존처럼 sqlite 사용
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + db_path
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
