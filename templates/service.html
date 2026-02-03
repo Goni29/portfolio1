@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block title %}서비스 | Portfolio{% endblock %}
+
+{% block content %}
+<section class="page-section bg-light" style="padding-top:8rem;">
+  <div class="container">
+
+    <!-- Title -->
+    <div class="text-center mb-5">
+      <h2 class="section-heading text-uppercase mb-2">SERVICES</h2>
+      <p class="text-muted mb-3">빠르게, 깔끔하게, 운영까지 생각한 웹을 만듭니다.</p>
+      <div class="d-flex justify-content-center gap-2 flex-wrap">
+        <span class="pill">반응형</span>
+        <span class="pill">문의/관리자</span>
+        <span class="pill">검색/필터</span>
+        <span class="pill">보안(마스킹/비밀번호)</span>
+      </div>
+    </div>
+
+    <!-- Core Services (3 cards) -->
+    <div class="row g-4 align-items-stretch">
+      <div class="col-lg-4">
+        <div class="info-card h-100">
+          <div class="service-icon">🏢</div>
+          <h4 class="mb-2">Company / Landing</h4>
+          <p class="text-muted mb-0">
+            기업 소개/랜딩 페이지를 <b>반응형</b>으로 제작합니다.
+            빠른 오픈과 전환(문의) 동선을 중심으로 구성해요.
+          </p>
+          <div class="mt-3">
+            <span class="tag">원페이지</span>
+            <span class="tag">반응형</span>
+            <span class="tag">CTA 최적화</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="info-card h-100">
+          <div class="service-icon">🛠️</div>
+          <h4 class="mb-2">MVP / Admin</h4>
+          <p class="text-muted mb-0">
+            문의/관리자/운영 기능까지 한 번에 구축합니다.
+            상태관리, 검색/필터, 답변 저장 등 <b>운영 효율</b>을 올려요.
+          </p>
+          <div class="mt-3">
+            <span class="tag">관리자</span>
+            <span class="tag">상태관리</span>
+            <span class="tag">답변 기능</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="info-card h-100">
+          <div class="service-icon">🔒</div>
+          <h4 class="mb-2">Security</h4>
+          <p class="text-muted mb-0">
+            비밀번호 조회/개인정보 마스킹 등 <b>기본 보안</b>을 챙깁니다.
+            “보이되, 과하게 노출되지 않게” 설계해요.
+          </p>
+          <div class="mt-3">
+            <span class="tag">마스킹</span>
+            <span class="tag">비밀번호 조회</span>
+            <span class="tag">접근제어</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Process -->
+    <div class="row g-4 mt-5">
+      <div class="col-lg-7">
+        <div class="info-card h-100">
+          <h4 class="mb-2">진행 프로세스</h4>
+          <p class="text-muted">불필요한 커뮤니케이션 비용을 줄이고, 결과물의 완성도를 높이는 방식으로 진행합니다.</p>
+          <div class="steps mt-3">
+            <div class="step"><span>1</span>요구사항/자료 수집</div>
+            <div class="step"><span>2</span>화면 설계/동선</div>
+            <div class="step"><span>3</span>개발/피드백</div>
+            <div class="step"><span>4</span>배포/운영 가이드</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="info-card h-100">
+          <h4 class="mb-2">납기 & 범위</h4>
+          <div class="spec">
+            <div class="spec-row">
+              <div class="spec-k">랜딩(원페이지)</div>
+              <div class="spec-v">약 3 ~ 7일</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-k">문의/게시판 + 관리자</div>
+              <div class="spec-v">약 1 ~ 2주</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-k">유지보수</div>
+              <div class="spec-v">월 단위 협의</div>
+            </div>
+          </div>
+          <div class="mt-3 text-muted small">
+            * 범위/피드백 횟수/디자인 난이도에 따라 변동될 수 있어요.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing -->
+    <div class="text-center mt-5 mb-3">
+      <h3 class="section-heading text-uppercase mb-2">패키지</h3>
+      <p class="text-muted mb-0">필요한 범위에 맞춰 빠르게 선택할 수 있게 구성했어요.</p>
+    </div>
+
+    <div class="row g-4 align-items-stretch mt-1">
+      <div class="col-lg-4">
+        <div class="price-card h-100">
+          <div class="price-head">
+            <div class="price-title">Starter</div>
+            <div class="price-sub text-muted">랜딩/회사소개</div>
+          </div>
+          <ul class="price-list">
+            <li>원페이지(반응형)</li>
+            <li>섹션 4~6개 구성</li>
+            <li>기본 SEO(메타)</li>
+            <li>배포 가이드</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="price-card featured h-100">
+          <div class="badge-top">추천</div>
+          <div class="price-head">
+            <div class="price-title">MVP</div>
+            <div class="price-sub text-muted">문의/게시판 + 운영</div>
+          </div>
+          <ul class="price-list">
+            <li>문의 등록/목록</li>
+            <li>비밀번호 조회</li>
+            <li>관리자(검색/필터/상태)</li>
+            <li>답변 저장(자동 완료)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="price-card h-100">
+          <div class="price-head">
+            <div class="price-title">Care</div>
+            <div class="price-sub text-muted">운영/개선/유지보수</div>
+          </div>
+          <ul class="price-list">
+            <li>버그 수정/개선</li>
+            <li>기능 추가(협의)</li>
+            <li>콘텐츠 수정 지원</li>
+            <li>운영 점검</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="row g-4 mt-5">
+      <div class="col-lg-12">
+        <div class="info-card">
+          <h4 class="mb-3">자주 묻는 질문</h4>
+
+          <div class="faq">
+            <div class="faq-item">
+              <div class="faq-q">Q. 제작에 필요한 자료는 무엇인가요?</div>
+              <div class="faq-a text-muted">로고/소개 문구/서비스 설명/참고 사이트(있으면) 정도면 시작 가능합니다.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q">Q. 배포/서버 비용은 어떻게 되나요?</div>
+              <div class="faq-a text-muted">초기엔 Render/Railway/Cloudtype 등으로 저비용 운영이 가능하고, 트래픽이 늘면 단계적으로 확장합니다.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q">Q. 문의 답변은 고객이 어디서 보나요?</div>
+              <div class="faq-a text-muted">고객은 문의 목록에서 글을 클릭 → 비밀번호 입력 → 본인 문의 내용/답변을 확인합니다.</div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center gap-2 flex-wrap mt-4">
+            <a class="btn btn-dark" href="{{ url_for('contact') }}">프로젝트 문의하기</a>
+            <a class="btn btn-outline-dark" href="{{ url_for('contact_info') }}">문의 게시판 보기</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}관리자 | 문의 목록{% endblock %}
+
+{% block content %}
+<section class="page-section bg-light" style="padding-top:8rem;">
+  <div class="container">
+
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+      <div>
+        <h2 class="section-heading text-uppercase mb-1">관리자 · 문의 목록</h2>
+        <p class="text-muted mb-0">총 {{ total }}건 · 미완료 {{ pending_count }}건</p>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        <a class="btn btn-outline-dark" href="{{ url_for('home') }}">사이트로</a>
+        <a class="btn btn-dark" href="{{ url_for('admin_logout') }}">로그아웃</a>
+      </div>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for msg in messages %}
+          <div class="alert alert-success mb-2">{{ msg }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% endwith %}
+
+    <form method="get" action="{{ url_for('admin_contacts') }}" class="row g-2 mb-3">
+      <div class="col-md-5">
+        <input class="form-control" name="q" placeholder="검색: 이름/이메일/내용" value="{{ q or '' }}">
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" name="status">
+          <option value="" {% if not status %}selected{% endif %}>전체 상태</option>
+          <option value="대기" {% if status=="대기" %}selected{% endif %}>대기</option>
+          <option value="처리중" {% if status=="처리중" %}selected{% endif %}>처리중</option>
+          <option value="완료" {% if status=="완료" %}selected{% endif %}>완료</option>
+        </select>
+      </div>
+      <div class="col-md-4 d-flex gap-2">
+        <button class="btn btn-dark" type="submit">검색/필터</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('admin_contacts') }}">초기화</a>
+      </div>
+    </form>
+
+    <div class="table-card">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th style="width:80px;">ID</th>
+              <th style="width:140px;">이름</th>
+              <th style="width:220px;">이메일</th>
+              <th>내용</th>
+              <th style="width:170px;">작성일</th>
+              <th style="width:110px;">상태</th>
+              <th style="width:90px;">삭제</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in contacts %}
+              <tr class="clickable-row"
+                  onclick="if(!event.target.closest('button, form, a, input, textarea, select, span')){ window.location='{{ url_for('admin_contact_detail', contact_id=c.id) }}'; }">
+                <td>{{ c.id }}</td>
+                <td class="text-nowrap">{{ c.name }}</td>
+                <td class="text-nowrap">{{ c.email }}</td>
+                <td class="truncate-1">{{ c.message }}</td>
+                <td class="text-nowrap">{{ c.created_at|kst }}</td>
+
+                <td>
+                  <form method="post" action="{{ url_for('admin_contact_status', contact_id=c.id) }}" class="m-0">
+                    <input type="hidden" name="status" value="{% if c.status=='대기' %}처리중{% elif c.status=='처리중' %}완료{% else %}완료{% endif %}">
+                    {% if c.status == "대기" %}
+                      <span class="badge badge-wait" style="cursor:pointer" onclick="this.closest('form').submit()">대기</span>
+                    {% elif c.status == "처리중" %}
+                      <span class="badge badge-prog" style="cursor:pointer" onclick="this.closest('form').submit()">처리중</span>
+                    {% else %}
+                      <span class="badge badge-done">완료</span>
+                    {% endif %}
+                  </form>
+                </td>
+
+                <td>
+                  <form method="post" action="{{ url_for('admin_contact_delete', contact_id=c.id) }}"
+                        onsubmit="return confirm('정말 삭제할까요?');" class="m-0">
+                    <button class="btn btn-sm btn-outline-danger" type="submit">삭제</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+
+            {% if not contacts %}
+              <tr><td colspan="7" class="text-center text-muted py-4">문의가 없습니다.</td></tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {% if total_pages > 1 %}
+      <div class="d-flex justify-content-center mt-4">
+        <nav>
+          <ul class="pagination mb-0">
+            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+              <a class="page-link" href="{{ url_for('admin_contacts', page=page-1, q=q, status=status) }}">이전</a>
+            </li>
+            <li class="page-item disabled"><span class="page-link">페이지 {{ page }} / {{ total_pages }}</span></li>
+            <li class="page-item {% if page >= total_pages %}disabled{% endif %}">
+              <a class="page-link" href="{{ url_for('admin_contacts', page=page+1, q=q, status=status) }}">다음</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

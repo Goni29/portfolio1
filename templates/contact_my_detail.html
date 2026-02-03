@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}문의 상세 | Portfolio{% endblock %}
+
+{% block content %}
+<section class="page-section" style="padding-top:8rem;">
+  <div class="container">
+
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+      <div>
+        <h2 class="section-heading text-uppercase mb-1">문의 상세</h2>
+        <p class="text-muted mb-0">문의 #{{ c.id }} · {{ c.created_at|kst }}</p>
+      </div>
+      <a class="btn btn-outline-dark" href="{{ url_for('contact_info') }}">목록</a>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="p-4 border rounded-4 bg-white">
+          <h4 class="mb-3">문의 내용</h4>
+          <div class="mb-2"><b>이름</b> : {{ c.name|mask_name }}</div>
+          <div class="mb-3"><b>이메일</b> : {{ c.email|mask_email }}</div>
+          <div class="p-3 bg-light rounded-3" style="white-space:pre-wrap;">{{ c.message }}</div>
+
+          <div class="mt-3">
+            {% if c.status == "대기" %}
+              <span class="badge badge-wait">대기</span>
+            {% elif c.status == "처리중" %}
+              <span class="badge badge-prog">처리중</span>
+            {% else %}
+              <span class="badge badge-done">완료</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="p-4 border rounded-4 bg-white">
+          <h4 class="mb-3">답변</h4>
+          {% if c.answer %}
+            <div class="p-3 bg-light rounded-3" style="white-space:pre-wrap;">{{ c.answer }}</div>
+            {% if c.answered_at %}
+              <div class="text-muted mt-2">답변일: {{ c.answered_at|kst }}</div>
+            {% endif %}
+          {% else %}
+            <div class="text-muted">아직 답변이 등록되지 않았습니다.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}문의하기 | Portfolio{% endblock %}
+
+{% block content %}
+<section class="page-section" id="contact" style="padding-top:8rem;">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-heading text-uppercase text-white">문의하기</h2>
+      <h3 class="section-subheading text-white-50">비밀번호는 문의 확인에 필요해요.</h3>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for msg in messages %}
+          <div class="alert alert-danger mb-2">{{ msg }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <form method="post" class="bg-dark p-4 rounded-4">
+          <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+              <input class="form-control" name="name" placeholder="이름" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <input class="form-control" name="email" placeholder="이메일" required>
+            </div>
+
+            <div class="col-12 mb-3">
+              <textarea class="form-control" name="message" placeholder="문의 내용" rows="6" required></textarea>
+            </div>
+
+            <div class="col-12 mb-1">
+              <input class="form-control" name="password" type="password" placeholder="조회 비밀번호" required>
+            </div>
+            <div class="col-12">
+              <small class="text-white-50">비밀번호는 저장되며, 나중에 문의 확인 시 필요합니다.</small>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <button class="btn btn-primary btn-xl text-uppercase" type="submit">문의 등록</button>
+            <a class="btn btn-outline-light btn-xl text-uppercase" href="{{ url_for('contact_info') }}">목록</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

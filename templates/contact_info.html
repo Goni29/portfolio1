@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}문의 | Portfolio{% endblock %}
+
+{% block content %}
+<section class="page-section bg-light" style="padding-top:8rem;">
+  <div class="container">
+
+    <div class="d-flex align-items-end justify-content-between flex-wrap gap-2 mb-3">
+      <div>
+        <h2 class="section-heading text-uppercase mb-1">문의</h2>
+        <p class="text-muted mb-0">글을 클릭하면 비밀번호 입력 후 내용을 확인할 수 있어요.</p>
+      </div>
+      <a class="btn btn-primary" href="{{ url_for('contact') }}">문의하기</a>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for msg in messages %}
+          <div class="alert alert-success mb-2">{{ msg }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="table-card">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th style="width:80px;">ID</th>
+              <th style="width:130px;">이름</th>
+              <th style="width:220px;">이메일</th>
+              <th>내용</th>
+              <th style="width:160px;">작성일</th>
+              <th style="width:100px;">상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in contacts %}
+              <tr class="clickable-row"
+                  onclick="window.location='{{ url_for('contact_password', contact_id=c.id) }}'">
+                <td>{{ c.id }}</td>
+                <td class="text-nowrap">{{ c.name|mask_name }}</td>
+                <td class="text-nowrap">{{ c.email|mask_email }}</td>
+                <td class="truncate-1">{{ c.message }}</td>
+                <td class="text-nowrap">{{ c.created_at|kst }}</td>
+                <td>
+                  {% if c.status == "대기" %}
+                    <span class="badge badge-wait">대기</span>
+                  {% elif c.status == "처리중" %}
+                    <span class="badge badge-prog">처리중</span>
+                  {% else %}
+                    <span class="badge badge-done">완료</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+            {% if not contacts %}
+              <tr><td colspan="6" class="text-center text-muted py-4">아직 문의가 없습니다.</td></tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {% if total_pages > 1 %}
+      <div class="d-flex justify-content-center mt-4">
+        <nav>
+          <ul class="pagination mb-0">
+            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+              <a class="page-link" href="{{ url_for('contact_info', page=page-1) }}">이전</a>
+            </li>
+            <li class="page-item disabled"><span class="page-link">페이지 {{ page }} / {{ total_pages }}</span></li>
+            <li class="page-item {% if page >= total_pages %}disabled{% endif %}">
+              <a class="page-link" href="{{ url_for('contact_info', page=page+1) }}">다음</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

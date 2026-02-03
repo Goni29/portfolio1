@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}관리자 | 문의 상세{% endblock %}
+
+{% block content %}
+<section class="page-section bg-light" style="padding-top:8rem;">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+      <div>
+        <h2 class="section-heading text-uppercase mb-1">문의 상세</h2>
+        <p class="text-muted mb-0">
+          #{{ c.id }} · {{ c.created_at|kst }}
+          {% if c.status %}
+            ·
+            {% if c.status == "대기" %}
+              <span class="badge badge-wait">대기</span>
+            {% elif c.status == "처리중" %}
+              <span class="badge badge-prog">처리중</span>
+            {% else %}
+              <span class="badge badge-done">완료</span>
+            {% endif %}
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="d-flex gap-2 flex-wrap">
+        <a class="btn btn-outline-dark" href="{{ url_for('admin_contacts') }}">목록</a>
+        <a class="btn btn-dark" href="{{ url_for('admin_logout') }}">로그아웃</a>
+      </div>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for msg in messages %}
+          <div class="alert alert-success mb-2">{{ msg }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="row g-4">
+
+      <!-- Left: Inquiry -->
+      <div class="col-lg-6">
+        <div class="p-4 border rounded-4 bg-white h-100">
+          <div class="d-flex justify-content-between align-items-start gap-2">
+            <div>
+              <h5 class="mb-1">문의 내용</h5>
+              <div class="text-muted small">고객 정보는 민감하니 필요한 범위에서만 확인하세요.</div>
+            </div>
+            <div class="text-end">
+              <div class="small text-muted">현재 상태</div>
+              {% if c.status == "대기" %}
+                <span class="badge badge-wait">대기</span>
+              {% elif c.status == "처리중" %}
+                <span class="badge badge-prog">처리중</span>
+              {% else %}
+                <span class="badge badge-done">완료</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <div class="small text-muted">이름</div>
+              <div class="fw-semibold">{{ c.name }}</div>
+            </div>
+            <div class="col-md-6">
+              <div class="small text-muted">이메일</div>
+              <div class="fw-semibold">{{ c.email }}</div>
+            </div>
+          </div>
+
+          <div class="small text-muted mb-2">문의 메시지</div>
+          <div class="p-3 bg-light rounded-3" style="white-space:pre-wrap; min-height: 220px;">{{ c.message }}</div>
+
+          <hr class="my-4">
+
+          <!-- Status control -->
+          <form method="post" action="{{ url_for('admin_contact_status', contact_id=c.id) }}" class="row g-2 align-items-end">
+            <div class="col-sm-8">
+              <label class="form-label mb-1">상태 변경</label>
+              <select class="form-select" name="status">
+                <option value="대기" {% if c.status=="대기" %}selected{% endif %}>대기</option>
+                <option value="처리중" {% if c.status=="처리중" %}selected{% endif %}>처리중</option>
+                <option value="완료" {% if c.status=="완료" %}selected{% endif %}>완료</option>
+              </select>
+            </div>
+            <div class="col-sm-4 d-grid">
+              <button class="btn btn-dark" type="submit">적용</button>
+            </div>
+          </form>
+
+          <div class="d-flex justify-content-between mt-3">
+            <a class="text-decoration-none" href="{{ url_for('admin_contacts') }}">← 목록으로</a>
+
+            <!-- Delete -->
+            <form method="post" action="{{ url_for('admin_contact_delete', contact_id=c.id) }}"
+                  onsubmit="return confirm('정말 삭제할까요?');">
+              <button class="btn btn-sm btn-outline-danger" type="submit">삭제</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Answer -->
+      <div class="col-lg-6">
+        <div class="p-4 border rounded-4 bg-white h-100">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h5 class="mb-1">답변</h5>
+              <div class="text-muted small">답변 저장 시 상태는 자동으로 <b>완료</b>가 됩니다.</div>
+            </div>
+            {% if c.answered_at %}
+              <div class="text-end">
+                <div class="small text-muted">답변일</div>
+                <div class="fw-semibold">{{ c.answered_at|kst }}</div>
+              </div>
+            {% endif %}
+          </div>
+
+          <hr class="my-4">
+
+          {% if c.answer %}
+            <div class="alert alert-info">
+              <div class="fw-bold mb-1">기존 답변</div>
+              <div style="white-space:pre-wrap;">{{ c.answer }}</div>
+            </div>
+          {% else %}
+            <div class="alert alert-secondary">
+              아직 답변이 없습니다. 답변을 등록해 주세요.
+            </div>
+          {% endif %}
+
+          <form method="post" action="{{ url_for('admin_contact_answer', contact_id=c.id) }}">
+            <label class="form-label mb-1">답변 내용</label>
+            <textarea class="form-control mb-3" name="answer" rows="10"
+                      placeholder="고객이 이해하기 쉽게, 다음 액션(견적/일정/자료 요청)을 포함해 주세요."
+                      required>{{ c.answer or "" }}</textarea>
+
+            <div class="d-grid">
+              <button class="btn btn-primary btn-lg" type="submit">답변 저장(자동 완료)</button>
+            </div>
+          </form>
+
+          <div class="mt-3 p-3 bg-light rounded-3">
+            <div class="small text-muted mb-1">답변 템플릿(예시)</div>
+            <div class="small" style="white-space:pre-wrap;">
+안녕하세요. 문의 주셔서 감사합니다.
+1) 목적/기능:
+2) 참고 사이트:
+3) 일정:
+4) 예산 범위:
+위 정보를 주시면 더 정확한 견적과 일정 안내드리겠습니다.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

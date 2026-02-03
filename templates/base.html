@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Portfolio Agency{% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts (Agency 톤) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto+Slab:wght@300;400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Agency CSS (네가 올린 파일) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <!-- 프로젝트 오버라이드(문의/관리자 UX) -->
+    <style>
+        /* 템플릿이 map-image.png를 기대하는데 없어도 깔끔하게 */
+        section#contact {
+            background-image: none !important;
+            background-color: #111827 !important;
+        }
+
+        /* 플래시 메시지 */
+        .flash-wrap {
+            margin-top: 1rem;
+        }
+
+        /* 테이블 카드 */
+        .table-card {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, .08);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background: #f9fafb;
+        }
+
+        .clickable-row {
+            cursor: pointer;
+        }
+
+        .truncate-1 {
+            max-width: 420px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 작은 화면에서 길이 대응 */
+        @media (max-width: 576px) {
+            .truncate-1 {
+                max-width: 180px;
+            }
+        }
+
+        /* 상태 배지 */
+        .badge-wait {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-prog {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-done {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* 관리자 링크 버튼 느낌 */
+        /* .admin-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .35rem .6rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .15);
+            color: #fff;
+            font-size: .875rem;
+            border: 1px solid rgba(255, 255, 255, .18);
+        } */
+
+        /* .admin-pill:hover {
+            background: rgba(255, 255, 255, .22);
+            color: #fff;
+        } */
+
+        /* HERO가 휑하게 보이는 문제 해결 */
+        header.masthead {
+            min-height: 92vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 7rem;
+            padding-bottom: 6rem;
+            background: radial-gradient(1200px circle at 20% 10%, rgba(255, 200, 0, .25), transparent 55%),
+                radial-gradient(900px circle at 80% 30%, rgba(255, 200, 0, .12), transparent 45%),
+                linear-gradient(180deg, #0b0f19 0%, #111827 100%);
+        }
+
+        .masthead .masthead-heading {
+            font-size: clamp(2.3rem, 5vw, 4.2rem);
+            letter-spacing: 0.02em;
+            margin-top: .75rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .masthead .masthead-subheading {
+            font-size: clamp(1rem, 1.8vw, 1.35rem);
+            opacity: .92;
+        }
+
+        #mainNav.navbar-shrink {
+            background: rgba(11, 15, 25, 0.92) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        clickable-row:hover td {
+            background: rgba(255, 200, 0, .08) !important;
+        }
+
+        .clickable-row td:first-child {
+            font-weight: 700;
+        }
+
+        .table-card,
+        .bg-white.border.rounded-4 {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .06);
+        }
+    </style>
+</head>
+
+<body id="page-top">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top
+     {% if request.endpoint in ['home', 'contact'] %}
+       navbar-dark nav-home
+     {% else %}
+       navbar-light nav-inner
+     {% endif %}" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">PORTFOLIO</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}"
+                            href="{{ url_for('home') }}">
+                            홈
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'about' %}active{% endif %}"
+                            href="{{ url_for('about') }}">
+                            소개
+                        </a>
+                    </li>
+
+                    <!-- <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'service' %}active{% endif %}"
+                            href="{{ url_for('service') }}">
+                            서비스
+                        </a>
+                    </li> -->
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint in ['contact', 'contact_info'] %}active{% endif %}"
+                            href="{{ url_for('contact') }}">
+                            문의
+                        </a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_login') }}">관리자</a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer py-4">
+        <div class="container">
+            <div>© 2026 Portfolio Agency</div>
+            <!-- <div class="col-lg-4 my-3 my-lg-0">
+                    <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Instagram"><i
+                            class="fab fa-instagram"></i></a>
+                    <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Github"><i
+                            class="fab fa-github"></i></a>
+                    <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Email"><i
+                            class="fa-solid fa-envelope"></i></a>
+                </div> -->
+            <div class="footer-links">
+                <a href="#" class="text-decoration-none me-3">Privacy</a>
+                <a href="#" class="text-decoration-none">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/a2e0e6ad52.js" crossorigin="anonymous"></script>
+
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+    <!-- Agency JS (네가 올린 파일) -->
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+
+</html>

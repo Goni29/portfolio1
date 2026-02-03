@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}홈 | Portfolio{% endblock %}
+
+{% block content %}
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-subheading">브랜드를 ‘결과’로 증명하는 웹 에이전시</div>
+    <div class="masthead-heading text-uppercase">Portfolio Agency</div>
+
+    <div class="d-flex justify-content-center gap-2 flex-wrap">
+      <a class="btn btn-primary btn-xl text-uppercase" href="{{ url_for('contact') }}">프로젝트 문의하기</a>
+      <a class="btn btn-outline-light btn-xl text-uppercase" href="{{ url_for('service') }}">서비스 보기</a>
+      <!-- <a class="admin-pill" href="{{ url_for('admin_login') }}">Admin</a> -->
+    </div>
+  </div>
+</header>
+
+<section class="page-section bg-light" id="services" style="padding-top:7rem;">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-heading text-uppercase">SERVICES</h2>
+      <h3 class="section-subheading text-muted">빠르게, 깔끔하게, 유지보수까지.</h3>
+    </div>
+
+    <div class="row text-center mt-5 g-4">
+      <div class="col-md-4">
+        <div class="service-item">
+          <div class="service-circle">
+            <i class="fa-solid fa-building"></i>
+          </div>
+          <h4 class="my-3">Company / Landing</h4>
+          <p class="text-muted">
+            기업 소개/랜딩 페이지를 반응형으로 제작합니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="service-item">
+          <div class="service-circle">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+          </div>
+          <h4 class="my-3">MVP / Admin</h4>
+          <p class="text-muted">
+            문의/관리자/운영 기능까지 한 번에 구축합니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="service-item">
+          <div class="service-circle">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <h4 class="my-3">Security</h4>
+          <p class="text-muted">
+            비밀번호 조회 + 개인정보 마스킹으로 안전하게.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-section bg-light">
+  <div class="container text-center">
+    <h2 class="section-heading text-uppercase">문의 게시판</h2>
+    <p class="text-muted mb-4">문의 목록에서 글을 클릭하면 비밀번호로 내용 확인이 가능합니다.</p>
+    <a class="btn btn-primary btn-xl text-uppercase" href="{{ url_for('contact_info') }}">문의 목록 보기</a>
+  </div>
+</section>
+{% endblock %}
