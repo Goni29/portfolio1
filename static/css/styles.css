@@ -11600,3 +11600,33 @@ body{
     border-color: rgba(255,255,255,.35) !important;
   }
 }
+
+header.masthead{
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 7rem;
+  padding-bottom: 6rem;
+
+  background: url("/static/image.png") center/cover no-repeat !important;
+}
+
+header.masthead::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(11,15,25,.45) 0%,
+    rgba(11,15,25,.60) 100%
+  );
+  pointer-events: none;
+}
+
+header.masthead .container{
+  position: relative;
+  z-index: 1;
+}
